@@ -1,0 +1,132 @@
+
+#include <iostream>
+#include <cstdio>
+using namespace std;
+
+class Multime {
+private:
+
+	int n;
+	int v[1000];
+
+public:
+	Multime() {
+		n = 0;
+	}
+	~Multime() {
+		n = 0;
+	}
+
+	void multimeUnica();
+
+	Multime(const Multime& old);
+
+	friend void operator<<(ostream& output, Multime& A);
+	friend void operator>>(istream& input, Multime& A);
+
+	Multime operator+(Multime&);
+	Multime operator*(Multime&);
+	Multime operator-(Multime&);
+
+};
+
+void operator<<(ostream& output, Multime& A) {
+
+	for (int i = 0; i < A.n; i++) output << A.v[i] << " ";
+	output << endl;
+}
+
+void operator>>(istream& input, Multime& A) {
+
+	cout << "Introduceti numarul de elemente: " << endl;
+	input >> A.n;
+	cout << "Introduceti elementele multimii: " << endl;
+	for (int i = 0; i < A.n; i++) input >> A.v[i];
+
+}
+
+Multime Multime::operator*(Multime& B) {
+
+	Multime T;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < B.n; j++) {
+			if (v[i] == B.v[j]) {
+				T.v[n] = B.v[j];
+				T.n++;
+			}
+		}
+	}
+
+	T.multimeUnica();
+	return T;
+}
+
+Multime Multime::operator-(Multime& B) {
+	Multime T;
+	for (int i = 0; i < n; i++) T.v[i]=v[i];
+	T.n = n;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < B.n; j++) {
+			if (v[i] == B.v[j]) {
+				for (int k = i; k < n; k++) {
+					T.v[k] = T.v[k + 1];
+				}
+				T.n--;
+			}
+		}
+	}
+	return T;
+
+}
+
+Multime Multime::operator+(Multime &B)
+{
+	int i, j;
+	Multime T;
+	T.n = n + B.n;
+
+	for (i = 0; i < n; i++)
+		T.v[i] = v[i];
+
+	for (j = 0; j < B.n; j++, i++)
+		T.v[i] = B.v[j];
+
+	T.multimeUnica();
+	return T;
+}
+
+void Multime::multimeUnica() {
+	for (int i = 0; i < n-1; i++) {
+		for (int j = i + 1; j < n; j++) {
+			if (v[i] == v[j]) {
+				for (int k = j ; k < n; k++) {
+					v[k] = v[k+1];
+				}
+				n--;
+			}
+		}
+	}
+}
+
+
+Multime::Multime(const Multime& old) {
+
+	for (int i = 0; i < n; i++) v[i] = old.v[i];
+
+}
+
+
+int main()
+{
+	Multime m, p, o,q,r;
+	cin >> m;
+	cin >> p;
+	m.multimeUnica();
+	p.multimeUnica();
+	o = m + p; // ?
+	q = m - p; // ?
+	r = m * p;
+	Multime k(m);
+	//cout << o;
+	//cout << m;
+}
